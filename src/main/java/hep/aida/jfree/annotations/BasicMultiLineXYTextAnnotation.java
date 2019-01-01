@@ -50,8 +50,17 @@ public class BasicMultiLineXYTextAnnotation extends XYTextAnnotation {
         splitLines(text);        
     }
     
-    private void splitLines(String text) {
+    // always use this when overriding...
+    @Override
+    public void setText(String text) {
+    	super.setText(text);
+        splitLines(text);
+    }
+    
+    // you should almost never use private
+    protected void splitLines(String text) {
         StringTokenizer st = new StringTokenizer(text, "\n");
+        lines.clear(); // calling set multiple times requires this...
         while (st.hasMoreTokens()) {
             lines.add(st.nextToken());
         }
@@ -90,7 +99,7 @@ public class BasicMultiLineXYTextAnnotation extends XYTextAnnotation {
     }
     
     public void addLine(String line) {
-        lines.add(line);
+        lines.add(line); // what about setText() ?
     }
     
     public void draw(Graphics2D g2, XYPlot plot, Rectangle2D dataArea,
