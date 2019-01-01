@@ -47,11 +47,12 @@ public class BasicMultiLineXYTextAnnotation extends XYTextAnnotation {
     
     public BasicMultiLineXYTextAnnotation(String text, double x, double y) {
         super(text, x, y);
-        splitLines(text);        
+        splitLines(text);
     }
     
     private void splitLines(String text) {
         StringTokenizer st = new StringTokenizer(text, "\n");
+        lines.clear();
         while (st.hasMoreTokens()) {
             lines.add(st.nextToken());
         }
@@ -145,8 +146,15 @@ public class BasicMultiLineXYTextAnnotation extends XYTextAnnotation {
         
         textAnchorX += paddingLeft;
                 
-        // Draw outline box.
         Rectangle2D rectangle = new Rectangle2D.Float(rectangleX, rectangleY, width, height);
+        
+        // bg paint.
+        if (getBackgroundPaint()!= null) {
+            g2.setPaint(getBackgroundPaint());
+            g2.fill(rectangle);
+        }
+
+        // Draw outline box.
         if (this.isOutlineVisible()) {
             g2.setStroke(this.getOutlineStroke());
             //g2.setPaint(this.getBackgroundPaint());
@@ -163,4 +171,11 @@ public class BasicMultiLineXYTextAnnotation extends XYTextAnnotation {
             textAnchorY += lineHeight;
         }
     }
+    
+    @Override
+    public void setText(String text) {
+    	super.setText(text);
+        splitLines(text);
+    }
+    
 }
